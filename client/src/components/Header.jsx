@@ -28,17 +28,17 @@ class Header extends Component {
     render() {
         return (
             <nav className="indigo">
-        <div className="nav-wrapper">
-          <Link
-            to={this.props.auth ? '/blogs' : '/'}
-            className="left brand-logo"
-            style={{ marginLeft: '10px' }}
-          >
-            Blogster
-          </Link>
-          <ul className="right">{this.renderContent()}</ul>
-        </div>
-      </nav>
+                <div className="nav-wrapper">
+                    <Link
+                        to={this.props.auth ? '/blogs' : '/'}
+                        className="left brand-logo"
+                        style={{ marginLeft: '10px' }}
+                    >
+                        Blogster
+                    </Link>
+                    <ul className="right">{this.renderContent()}</ul>
+                </div>
+            </nav>
         );
     }
 }

@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const keys = require('./config/keys');
+const compression = require('compression');
 
 require('./models/User');
 require('./models/Blog');
@@ -18,6 +19,9 @@ mongoose.connect(keys.mongoURI, {
 
 const app = express();
 
+const helmet = require("helmet");
+app.use(helmet());
+
 app.use(bodyParser.json());
 app.use(
     cookieSession({
@@ -27,6 +31,8 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+// compress responses
+app.use(compression());
 
 require('./routes/authRoutes')(app);
 require('./routes/blogRoutes')(app);

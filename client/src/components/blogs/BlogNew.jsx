@@ -5,33 +5,33 @@ import BlogForm from './BlogForm';
 import BlogFormReview from './BlogFormReview';
 
 class BlogNew extends Component {
-  state = { showFormReview: false };
+    state = { showFormReview: false };
 
-  renderContent() {
-    if (this.state.showFormReview) {
-      return (
-        <BlogFormReview
-          onCancel={() => this.setState({ showFormReview: false })}
-        />
-      );
+    renderContent() {
+        if (this.state.showFormReview) {
+            return (
+                <BlogFormReview
+                    onCancel={() => this.setState({ showFormReview: false })}
+                />
+            );
+        }
+
+        return (
+            <BlogForm
+                onBlogSubmit={() => this.setState({ showFormReview: true })}
+            />
+        );
     }
 
-    return (
-      <BlogForm
-        onBlogSubmit={() => this.setState({ showFormReview: true })}
-      />
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        {this.renderContent()}
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div>
+                {this.renderContent()}
+            </div>
+        );
+    }
 }
 
 export default reduxForm({
-  form: 'blogForm'
+    form: 'blogForm'
 })(BlogNew);
