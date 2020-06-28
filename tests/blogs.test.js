@@ -44,6 +44,7 @@ describe('when logged in', () => {
         beforeEach(async () => {
             await page.type('input[name="title"]', 'My title');
             await page.type('input[name="content"]', 'My content is some dummy for the test');
+
             await page.click('form button');
         });
 
@@ -53,6 +54,11 @@ describe('when logged in', () => {
         });
 
         it('submitting then saving adds blog to index page', async () => {
+            //upload the file on review page
+            // get the ElementHandle of the selector above
+            const inputUploadHandle = await page.$('input[type="file"]');
+            // Sets the value of the file input to fileToUpload
+            await inputUploadHandle.uploadFile('./tests/test_to_upload.jpeg');
             await page.click('button.green');
             await page.waitFor('.card');
 
@@ -61,6 +67,36 @@ describe('when logged in', () => {
 
             expect(title).toEqual('My title');
             expect(content).toEqual('My content is some dummy for the test');
+        });
+
+        it('image is shown on blog detail page', async () => {
+            //upload the file on review page
+            // get the ElementHandle of the selector above
+            const inputUploadHandle = await page.$('input[type="file"]');
+            // Sets the value of the file input to fileToUpload
+            await inputUploadHandle.uploadFile('./tests/test_to_upload.jpeg');
+            await page.click('button.green');
+            await page.waitFor('.card');
+            await page.click('.card-action a');
+            await page.waitFor(3000);
+
+            const imageLoaded = await page.evaluate(async () => {
+                // Scroll down to bottom of page to activate lazy loading images
+                document.body.scrollIntoView(false);
+
+                // Wait for all remaining lazy loading images to load
+                return await Promise.all(Array.from(document.getElementsByTagName('img'), image => {
+                    if (image.complete) {
+                        return true;
+                    }
+
+                    return new Promise((resolve, reject) => {
+                        image.addEventListener('load', resolve);
+                        image.addEventListener('error', reject);
+                    });
+                }))
+            });
+            expect(imageLoaded).toEqual([true]);
         });
     });
 });
